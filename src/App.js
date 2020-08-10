@@ -1,26 +1,15 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {Container} from 'reactstrap';
+import Navigation from './Navigation.js';
+import Recipe from './Recipe.js';
 
 class App extends Component {
-    state = { recipes: [] };
-
-    componentDidMount() {
-        fetch('/Recipe')
-            .then(res => res.json())
-            .then(recipes => this.setState({ recipes }))
-    }
-
     render() {
         return (
-            <div className="App">
-              <h1>Recipes</h1>
-              <ul>
-                {this.state.recipes.map(obj =>
-                    <li key={obj.id}>{obj.title}</li>
-                )}
-              </ul>
-            </div>
+            <Container className="App" fluid={true}>
+                <Navigation />
+                <Recipe />
+            </Container>
         );
     }
 }
