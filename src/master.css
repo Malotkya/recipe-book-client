@@ -1,0 +1,53 @@
+@font-face {
+    font-family: recipeTitle;
+    src: url("./fonts/FontsFree-Net-Modern2.ttf");
+}
+
+@font-face {
+    font-family: sectionTitle;
+    src: url("./fonts/FontsFree-Net-FlashonSaturdayNightItalic.ttf");
+}
+
+.recipe {
+    display: grid;
+    grid-template-columns: 20% 20% 60%;
+    grid-template-rows: 5em 3em 1fr;
+    height: 90vh;
+}
+
+.recipe h3 {
+    font-family: sectionTitle;
+    text-align: center;
+    width: auto
+}
+
+.recipe ul,
+.recipe ol {
+    overflow-y: scroll;
+}
+
+.recipe ul {
+    list-style-type: none;
+}
+
+.title {
+    grid-column: 1 / 4;
+}
+
+.title h2 {
+    font-family: recipeTitle;
+    font-size: 3.5em;
+    display: inline-block;
+    height: 100%;
+}
+
+.title span {
+    display: inline-block;
+    height: 100%;
+    max-height: 100%;
+}
+
+.title span img {
+    width: 50px;
+    height: auto;
+}
