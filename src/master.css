@@ -1,5 +1,5 @@
 @font-face {
-    font-family: recipeTitle;
+    font-family: mainTitle;
     src: url("./fonts/FontsFree-Net-Modern2.ttf");
 }
 
@@ -8,11 +8,19 @@
     src: url("./fonts/FontsFree-Net-FlashonSaturdayNightItalic.ttf");
 }
 
+h1 {
+    font-family: mainTitle;
+}
+
+.navbar-collapse {
+    margin-left: 0.5em;
+}
+
 .recipe {
     display: grid;
     grid-template-columns: 20% 20% 60%;
-    grid-template-rows: 5em 3em 1fr;
-    height: 90vh;
+    grid-template-rows: 20vh 3em 1fr;
+    height: 100vh;
 }
 
 .recipe h3 {
@@ -32,22 +40,46 @@
 
 .title {
     grid-column: 1 / 4;
+    display: grid;
+    grid-template-columns: 40% 50%;
 }
 
 .title h2 {
-    font-family: recipeTitle;
+    font-family: mainTitle;
     font-size: 3.5em;
-    display: inline-block;
+    text-align: center;
+}
+
+.title figure {
+    overflow: hidden;
+    height: 100%;
+    width: 59vw;
+    display: flex;
+    justify-content: space-between;
+}
+
+.title figure img {
+    width: auto;
     height: 100%;
 }
 
-.title span {
-    display: inline-block;
-    height: 100%;
-    max-height: 100%;
+.recipeListItem {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
 }
 
-.title span img {
-    width: 50px;
+.recipeListItem figure img {
+    width: 100%;
     height: auto;
+}
+
+.recipeListItem h3 {
+    font-family: sectionTitle;
+}
+
+.tab-content h2 {
+    text-align: center;
+    font-size: 3rem;
+    font-family: mainTitle;
 }
