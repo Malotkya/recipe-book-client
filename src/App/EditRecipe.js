@@ -8,10 +8,17 @@ const EditRecipe = props => {
     const [errorVisable, setErrorVisible] = useState(false);
     const [error, setError] = useState("");
     const dismisError = () => setErrorVisible(false);
-
     const displayError = message => {
         setError(message);
         setErrorVisible(true);
+    }
+
+    const [messageVisable, setMessageVisible] = useState(false);
+    const [message, setMessage] = useState("");
+    const dismisMessage = () =>setMessageVisible(false);
+    const displayMessage = message => {
+        setMessage(message);
+        setMessageVisible(true);
     }
 
     const handleInputChange = e => setRecipe({
@@ -20,7 +27,7 @@ const EditRecipe = props => {
   })
 
     useEffect(()=>{
-        if(props.id > 0){
+        if(props.id > 0 ){
             fetch(`/Recipe/${props.id}`).then(async(res) => {
                 if(!res.ok)
                     throw await res.json();
@@ -29,6 +36,13 @@ const EditRecipe = props => {
                 object.items = object.items.join("\n");
                 object.directions = object.directions.join("\n");
                 object.ingredients = object.ingredients.join("\n");
+
+                let input = document.querySelector(`#images${props.id}`);
+                object.images.forEach(file => {
+                    let pic = document.createElement("img");
+                    pic.src = "./images/" + props.id + "/" + file;
+                    input.appendChild(pic);
+                })
 
                 setRecipe(object);
             }).catch(e => {
@@ -39,27 +53,51 @@ const EditRecipe = props => {
     }, []);
 
     const submit = event => {
-        let target = "/Recipe"
+        event.preventDefault();
+        let target = "/Recipe";
         if(props.id > 0)
             target += "/" + props.id;
+
+        fetch(target, {
+            method:"POST",
+            headers: {'Content-Type': 'application/json; charset=UTF-8'},
+            body: JSON.stringify({
+                title: recipe.title,
+                directions: recipe.directions.split("\n"),
+                ingredients: recipe.ingredients.split("\n"),
+                items: recipe.items.split("\n"),
+                images: recipe.images
+            })
+        }).then(async(req) => {
+            if(!req.ok)
+                throw await req.json();
+
+            displayMessage("Success");
+        }).catch(e => {
+            displayError(e.message);
+            console.error(e);
+        });
 
 
     }
 
     return (
-        <TabPane tabId={props.tab} id={props.tab}>
+        <TabPane tabId={props.tab}>
             <Alert  color="danger" isOpen={errorVisable} toggle={dismisError}>
                 {error}
             </Alert >
+            <Alert  color="success" isOpen={messageVisable} toggle={dismisMessage}>
+                {message}
+            </Alert >
             <h2>{props.title}</h2>
-            <Form onsubmit="submit" className="recipe" style={{height:"40em"}}>
+            <Form onSubmit={submit} className="recipe" style={{height:"40em"}} >
                 <div className="title">
                     <FormGroup>
                         <Label for="title">Recipe Title:</Label>
                         <Input type="text" name="title" id="title" value={recipe.title} onChange={handleInputChange}/>
                         <Button color="primary">Submit</Button>
                     </FormGroup>
-                    <ImageInput value={recipe.images} onChange={handleInputChange} name="images" />
+                    <ImageInput value={recipe.images} onChange={handleInputChange} name="images" recipe={props.id} id="images"/>
                 </div>
                 <Label for="items">Items:</Label>
                 <Label for="ingredients">Ingredients:</Label>
