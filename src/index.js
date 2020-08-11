@@ -3,12 +3,15 @@ import './master.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import MobileApp from './MobileApp'
+import {Container} from 'reactstrap';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <>
-    <App />
-  </>,
+    <Container className="App" fluid={true}>
+        <MobileApp />
+        <App />
+    </Container>,
   document.getElementById('root')
 );
 
