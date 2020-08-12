@@ -2,12 +2,12 @@ import React from 'react';
 import {ListGroupItem} from 'reactstrap';
 
 const RecipeListItem = props => {
-    let preview = (<img src={`./images/0.png`} />);
+    let preview = (<img src={`./images/0.png`} alt=""/>);
     if(props.recipe.images.length > 0)
-        preview = (<img src={`./images/${props.recipe.id}/${props.recipe.images[0]}`} />);
-        
+        preview = (<img src={`./images/${props.recipe.id}/${props.recipe.images[0]}`} alt=""/>);
+
     return (
-        <ListGroupItem key={props.recipe.id} className=" recipeListItem row">
+        <ListGroupItem className="recipeListItem row">
             <figure className="col-1">
                 {preview}
             </figure>
