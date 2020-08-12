@@ -1,9 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {TabPane, Alert, Form, Input, Button } from 'reactstrap';
 
 const ImportRecipe = props => {
-    const [list, setList] = useState([]);
-
     const [visible, setVisible] = useState(false);
     const [alert, setAlert] = useState("");
     const onDismiss = () => setVisible(false);
@@ -14,7 +12,7 @@ const ImportRecipe = props => {
     }
 
     const submit = event => {
-
+        displayAlert("Not Yet Working!");
     }
 
     return (
@@ -23,8 +21,9 @@ const ImportRecipe = props => {
                 {alert}
             </Alert >
             <h2>Import Recipe</h2>
-            <Form>
-                
+            <Form onSubmit={submit}>
+                <Input type="text" />
+                <Button>Submit</Button>
             </Form>
         </TabPane>
     )
