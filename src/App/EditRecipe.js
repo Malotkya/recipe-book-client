@@ -1,9 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {TabPane, Alert, Form, Input, Button, Label, FormGroup } from 'reactstrap';
 import ImageInput from './ImageInput.js';
+import {recipe} from '../backend.js';
 
 const EditRecipe = props => {
-    const [recipe, setRecipe] = useState({});
+    const [form, setRecipe] = useState({
+            title: "",
+            items: "",
+            ingredients: "",
+            directions: "",
+            images: []
+        });
 
     const [errorVisable, setErrorVisible] = useState(false);
     const [error, setError] = useState("");
@@ -21,65 +28,44 @@ const EditRecipe = props => {
         setMessageVisible(true);
     }
 
-    const handleInputChange = e => setRecipe({
-    ...recipe,
-    [e.currentTarget.name]: e.currentTarget.value
-  })
+    const handleInputChange = e => {
+        setRecipe({
+        ...form,
+        [e.target.name]: e.target.value
+        });
+        console.log(form);
+    }
+
+    const submit = event => {
+        event.preventDefault();
+
+        recipe.save(props.id, {
+            title: recipe.title,
+            items: recipe.items.split('\n'),
+            ingredients: recipe.ingredients.split('\n'),
+            directions: recipe.directions.split('\n'),
+            images: recipe.images
+        }).then(res => displayMessage("Success")).catch(e => {
+            displayError(e.message);
+            console.error(e);
+        });
+    };
 
     useEffect(()=>{
         if(props.id > 0 ){
-            fetch(`/Recipe/${props.id}`).then(async(res) => {
-                if(!res.ok)
-                    throw await res.json();
+            recipe.getById(props.id).then(res => {
 
-                let object = await res.json();
-                object.items = object.items.join("\n");
-                object.directions = object.directions.join("\n");
-                object.ingredients = object.ingredients.join("\n");
+                res.items = res.items.join("\n");
+                res.directions = res.directions.join("\n");
+                res.ingredients = res.ingredients.join("\n");
 
-                let input = document.querySelector(`#images${props.id}`);
-                object.images.forEach(file => {
-                    let pic = document.createElement("img");
-                    pic.src = "./images/" + props.id + "/" + file;
-                    input.appendChild(pic);
-                })
-
-                setRecipe(object);
+                setRecipe(res);
             }).catch(e => {
                 console.error(e);
                 displayError(e.message);
             })
         }
     }, []);
-
-    const submit = event => {
-        event.preventDefault();
-        let target = "/Recipe";
-        if(props.id > 0)
-            target += "/" + props.id;
-
-        fetch(target, {
-            method:"POST",
-            headers: {'Content-Type': 'application/json; charset=UTF-8'},
-            body: JSON.stringify({
-                title: recipe.title,
-                directions: recipe.directions.split("\n"),
-                ingredients: recipe.ingredients.split("\n"),
-                items: recipe.items.split("\n"),
-                images: recipe.images
-            })
-        }).then(async(req) => {
-            if(!req.ok)
-                throw await req.json();
-
-            displayMessage("Success");
-        }).catch(e => {
-            displayError(e.message);
-            console.error(e);
-        });
-
-
-    }
 
     return (
         <TabPane tabId={props.tab}>
@@ -94,18 +80,18 @@ const EditRecipe = props => {
                 <div className="title">
                     <FormGroup>
                         <Label for="title">Recipe Title:</Label>
-                        <Input type="text" name="title" id="title" value={recipe.title} onChange={handleInputChange}/>
+                        <Input type="text" name="title" id="title" value={form.title} onChange={handleInputChange}/>
                         <Button color="primary">Submit</Button>
                     </FormGroup>
-                    <ImageInput value={recipe.images} onChange={handleInputChange} name="images" recipe={props.id} id="images"/>
+                    <ImageInput value={form.images} onChange={handleInputChange} name="images" recipe={props.id} id="images"/>
                 </div>
                 <Label for="items">Items:</Label>
                 <Label for="ingredients">Ingredients:</Label>
                 <Label for="directions">Directions</Label>
 
-                <Input type="textarea" name="items" id="items" value={recipe.items}  onChange={handleInputChange}/>
-                <Input type="textarea" name="ingredients" id="ingredients" value={recipe.ingredients}  onChange={handleInputChange}/>
-                <Input type="textarea" name="directions" id="directions" value={recipe.directions}  onChange={handleInputChange}/>
+                <Input type="textarea" name="items" id="items" value={form.items}  onChange={handleInputChange}/>
+                <Input type="textarea" name="ingredients" id="ingredients" value={form.ingredients}  onChange={handleInputChange}/>
+                <Input type="textarea" name="directions" id="directions" value={form.directions}  onChange={handleInputChange}/>
             </Form>
         </TabPane>
     )

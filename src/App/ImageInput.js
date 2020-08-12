@@ -1,46 +1,36 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {FormGroup} from 'reactstrap'
+import {image} from '../backend.js';
 
 const ImageInput = props => {
+    const [list, setList] = useState([])
+
+    const remove = event => {
+        let index = event.target.attributes.file.nodeValue;
+        props.value.splice(index, 1)
+        props.onChange({target:{
+            name:props.name,
+            value:props.value
+        }})
+    }
 
     useEffect(()=>{
-        let input = document.querySelector(`#${props.id+props.recipe}`);
+        let newList = [];
         if(typeof props.value !== "undefined") {
-            props.value.forEach(file => {
-                let pic = document.createElement("img");
-                pic.src = "./images/" + props.recipe + "/" + file;
-                input.appendChild(pic);
-            });
+            props.value.forEach( (file,index) => {
+                newList.push( <img src={"./images/" + props.recipe + "/" + file} alt=""
+                            onClick={remove} file={index} key={index}/> );
+            })
         }
-    }, []);
+        setList(newList);
+    }, [props.value]);
 
     const handleChange = e => {
-        const files = e.target.files
-        const formData = new FormData()
-        formData.append('image', files[0])
-
-        fetch(`/Image/${props.recipe}`, {
-            method: 'POST',
-            body: formData
-        }).then(async(res) => {
-            if(!res.ok)
-                throw await res.json();
-
-            let object = await res.json();
-            console.log(object);
-            let pic = document.createElement("img");
-            pic.src = "./images/" + props.recipe + "/" + object.file;
-
-            document.querySelector(`#${props.id+props.recipe}`).appendChild(pic);
-
-            let update = props.value;
-            update.push(object.file);
-
-            props.onChange({currentTarget:{
+        image.upload(props.recipe, e.target.files).then(res => {
+            props.onChange({target:{
                 name:props.name,
-                value:update
+                value:props.value.concat(res.file)
             }});
-
         }).catch(error => {
             console.error(error)
          })
@@ -49,7 +39,9 @@ const ImageInput = props => {
     return (
         <FormGroup>
             <input type="file" onChange={handleChange}/>
-            <figure id={props.id+props.recipe}></figure>
+            <figure id={props.id+props.recipe}>
+                {list}
+            </figure>
         </FormGroup>
     );
 }
