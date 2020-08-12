@@ -62,7 +62,7 @@ const EditRecipe = props => {
                 displayError(e.message);
             })
         }
-    }, []);
+    }, [props.id]);
 
     return (
         <TabPane tabId={props.tab}>

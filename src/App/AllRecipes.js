@@ -31,7 +31,7 @@ const AllRecipes = props => {
                 {alert}
             </Alert >
             <ListGroup className="p-4">
-                {list.map(recipe => <RecipeListItem recipe={recipe} key={recipe.id}/>)}
+                {list.map(recipe => <RecipeListItem editRecipe={props.editRecipe} recipe={recipe} key={recipe.id}/>)}
             </ListGroup>
         </TabPane>
     )
