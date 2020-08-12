@@ -6,12 +6,14 @@ const ImageInput = props => {
     const [list, setList] = useState([])
 
     const remove = event => {
-        let index = event.target.attributes.file.nodeValue;
-        props.value.splice(index, 1)
-        props.onChange({target:{
-            name:props.name,
-            value:props.value
-        }})
+        if(window.confirm("Are you sure you want to delete the picture?")) {
+            let index = event.target.attributes.file.nodeValue;
+            props.value.splice(index, 1);
+            props.onChange({target:{
+                name:props.name,
+                value:props.value.slice()  //slice needed to trigger update
+            }});
+        }
     }
 
     useEffect(()=>{
