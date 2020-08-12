@@ -28,6 +28,8 @@ const Recipe = props => {
                 console.error(e);
                 displayAlert(e.message);
             })
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -39,7 +41,7 @@ const Recipe = props => {
                 <h2>{recipe.title}</h2>
                 <figure>
                     {recipe.images.map(img =>
-                        <img src={`./images/${recipe.id}/${img}`} />
+                        <img src={`./images/${recipe.id}/${img}`} alt=""/>
                     )}
                 </figure>
             </div>

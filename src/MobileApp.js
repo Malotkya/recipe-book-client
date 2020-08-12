@@ -1,6 +1,6 @@
 import React from 'react';
 import {MobileView} from 'react-device-detect';
-import Recipe from './Recipe.js';
+import Recipe from './Mobile/Recipe.js';
 
 const MobileApp = props => {
     return (
