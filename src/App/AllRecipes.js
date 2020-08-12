@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {TabPane, Alert, ListGroup } from 'reactstrap';
 import RecipeListItem from './RecipeListItem.js';
+import {recipe} from "../backend.js";
 
 const AllRecipes = props => {
     const [list, setList] = useState([]);
@@ -14,15 +15,13 @@ const AllRecipes = props => {
     }
 
     useEffect(()=>{
-        fetch('/Recipe').then(async(res) => {
-            if(!res.ok)
-                throw await res.json();
-
-            setList(await res.json());
+        recipe.getAll().then(res => {
+            setList(res);
         }).catch(e => {
             console.error(e);
             displayAlert(e.message);
-        })
+        });
+
     }, []);
 
     return (
@@ -32,7 +31,7 @@ const AllRecipes = props => {
                 {alert}
             </Alert >
             <ListGroup className="p-4">
-                {list.map(recipe => <RecipeListItem recipe={recipe} />)}
+                {list.map(recipe => <RecipeListItem recipe={recipe} key={recipe.id}/>)}
             </ListGroup>
         </TabPane>
     )
