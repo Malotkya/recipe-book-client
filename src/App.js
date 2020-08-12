@@ -26,7 +26,7 @@ const App = (props) => {
                 <TabPane tabId="calendar">
                     <h2>Calendar</h2>
                 </TabPane>
-                <EditRecipe id="1" title="New Recipe" tab="new" />
+                <EditRecipe id="-1" title="New Recipe" tab="new" />
                 <ImportRecipe editRecipe={editRecipe} />
                 <AllRecipes editRecipe={editRecipe} />
                 <EditRecipe id={editTarget} title="Edit Recipe" tab="edit"/>
