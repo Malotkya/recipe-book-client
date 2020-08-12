@@ -28,23 +28,20 @@ const EditRecipe = props => {
         setMessageVisible(true);
     }
 
-    const handleInputChange = e => {
-        setRecipe({
-        ...form,
-        [e.target.name]: e.target.value
-        });
-        console.log(form);
-    }
+    const handleInputChange = e => setRecipe({
+    ...form,
+    [e.target.name]: e.target.value
+    })
 
     const submit = event => {
         event.preventDefault();
 
         recipe.save(props.id, {
-            title: recipe.title,
-            items: recipe.items.split('\n'),
-            ingredients: recipe.ingredients.split('\n'),
-            directions: recipe.directions.split('\n'),
-            images: recipe.images
+            title: form.title,
+            items: form.items.split('\n'),
+            ingredients: form.ingredients.split('\n'),
+            directions: form.directions.split('\n'),
+            images: form.images
         }).then(res => displayMessage("Success")).catch(e => {
             displayError(e.message);
             console.error(e);
