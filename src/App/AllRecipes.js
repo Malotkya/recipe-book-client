@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {TabPane, Alert, ListGroup } from 'reactstrap';
+import {Alert, ListGroup } from 'reactstrap';
 import RecipeListItem from './RecipeListItem.js';
 import {recipe} from "../backend.js";
 
@@ -25,15 +25,15 @@ const AllRecipes = props => {
     }, []);
 
     return (
-        <TabPane tabId="all">
+        <>
             <h2>All Recipes</h2>
             <Alert  color="danger" isOpen={visible} toggle={onDismiss}>
                 {alert}
             </Alert >
             <ListGroup className="p-4">
-                {list.map(recipe => <RecipeListItem editRecipe={props.editRecipe} recipe={recipe} key={recipe.id}/>)}
+                {list.map(recipe => <RecipeListItem toggle={props.toggle} recipe={recipe} key={recipe.id}/>)}
             </ListGroup>
-        </TabPane>
+        </>
     )
 }
 

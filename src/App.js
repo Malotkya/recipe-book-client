@@ -1,36 +1,54 @@
 import React, {useState} from 'react';
-import {TabPane, TabContent} from 'reactstrap';
+import {Alert} from 'reactstrap';
 import {BrowserView} from 'react-device-detect';
 import Navigation from './App/Navigation.js';
 import AllRecipes from './App/AllRecipes.js';
 import ImportRecipe from './App/ImportRecipe.js'
 import EditRecipe from './App/EditRecipe.js';
+import Calendar from './App/Calendar.js';
 
 const App = (props) => {
-    const [activeTab, setActiveTab] = useState('calendar');
-    const [editTarget, setEditTarget] = useState(-1);
+    const [view, setView] = useState(<Calendar />);
 
-    const toggle = tab => {
-        if(activeTab !== tab) setActiveTab(tab);
-    }
+    const toggle = (tab, ...props) => {
+        console.log(props);
+        switch(tab){
+            case "calendar":
+            setView(<Calendar />);
+            break;
 
-    const editRecipe = id => {
-        setEditTarget(id);
-        toggle("edit");
+            case "all":
+            setView(<AllRecipes toggle={toggle}/>);
+            break;
+
+            case "import":
+            setView(<ImportRecipe />);
+            break;
+
+            case "new":
+            setView(<EditRecipe id="-1" />)
+            break;
+
+            case "edit":
+            setView(<EditRecipe id={props[0]} />);
+            break;
+
+            default:
+            setView(
+                <Alert  color="danger">
+                    There was an error navigating to the view!
+                </Alert >
+            );
+            break;
+        }
     }
 
     return (
         <BrowserView>
-            <Navigation toggle={toggle} activeTab={activeTab}/>
-            <TabContent activeTab={activeTab}>
-                <TabPane tabId="calendar">
-                    <h2>Calendar</h2>
-                </TabPane>
-                <EditRecipe id="-1" title="New Recipe" tab="new" />
-                <ImportRecipe editRecipe={editRecipe} />
-                <AllRecipes editRecipe={editRecipe} />
-                <EditRecipe id={editTarget} title="Edit Recipe" tab="edit"/>
-            </TabContent>
+            <Navigation toggle={toggle}/>
+            <main>
+                {view}
+            </main>
         </BrowserView>
     );
 }

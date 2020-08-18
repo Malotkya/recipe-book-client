@@ -11,6 +11,7 @@ const EditRecipe = props => {
             directions: "",
             images: []
         });
+    let title = "Edit Recipe";
 
     const [errorVisable, setErrorVisible] = useState(false);
     const [error, setError] = useState("");
@@ -64,15 +65,20 @@ const EditRecipe = props => {
         }
     }, [props.id]);
 
+    useEffect(()=>{
+        if(props.id <= 0)
+            title = "New Recipe";
+    }, [])
+
     return (
-        <TabPane tabId={props.tab}>
+        <>
             <Alert  color="danger" isOpen={errorVisable} toggle={dismisError}>
                 {error}
             </Alert >
             <Alert  color="success" isOpen={messageVisable} toggle={dismisMessage}>
                 {message}
             </Alert >
-            <h2>{props.title}</h2>
+            <h2>{title}</h2>
             <Form onSubmit={submit} className="recipe" style={{height:"40em"}} >
                 <div className="title">
                     <FormGroup>
@@ -90,7 +96,7 @@ const EditRecipe = props => {
                 <Input type="textarea" name="ingredients" id="ingredients" value={form.ingredients}  onChange={handleInputChange}/>
                 <Input type="textarea" name="directions" id="directions" value={form.directions}  onChange={handleInputChange}/>
             </Form>
-        </TabPane>
+        </>
     )
 }
 

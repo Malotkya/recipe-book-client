@@ -7,11 +7,18 @@ const RecipeListItem = props => {
         preview = (<img src={`./images/${props.recipe.id}/${props.recipe.images[0]}`} alt=""/>);
 
 
-    const click = event => props.editRecipe(event.target.id);
+    const click = event => {
+        event.preventDefault();
+        while(event.target.localName !== "a") {
+            event.target = event.target.parentNode;
+        }
+
+        props.toggle("edit", event.target.id);
+    }
 
     return (
-        <ListGroupItem className="">
-            <a className="recipeListItem row" href="#edit" onClick={click} id={props.recipe.id}>
+        <ListGroupItem>
+            <a className="row recipeListItem" href="#edit" onClick={click} id={props.recipe.id}>
             <figure className="col-1">
                 {preview}
             </figure>

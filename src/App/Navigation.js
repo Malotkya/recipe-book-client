@@ -1,11 +1,16 @@
 import React, {useState} from 'react';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
-import classnames from 'classnames';
 
 const Navigation = props => {
     const [collapsed, setCollapsed] = useState(true);
 
     const toggleNavbar = () => setCollapsed(!collapsed);
+
+    const click = event => {
+        event.preventDefault();
+
+        props.toggle(event.target.href.split("#")[1]);
+    }
 
     return (
         <Navbar color="light" light expand="md">
@@ -14,20 +19,16 @@ const Navigation = props => {
             <Collapse isOpen={!collapsed} navbar>
                 <Nav navbar>
                     <NavItem>
-                        <NavLink className={classnames({ active: props.activeTab === 'calendar'})}
-                                onClick={()=>{props.toggle('calendar')}} href="#calendar">Calendar</NavLink>
+                        <NavLink onClick={click} href="#calendar">Calendar</NavLink>
                     </NavItem>
                     <NavItem>
-                    <NavLink className={classnames({ active: props.activeTab === 'new'})}
-                            onClick={()=>{props.toggle('new')}} href="#new">New Recipe</NavLink>
+                    <NavLink onClick={click} href="#new">New Recipe</NavLink>
                     </NavItem>
                     <NavItem>
-                    <NavLink className={classnames({ active: props.activeTab === 'import'})}
-                            onClick={()=>{props.toggle('import')}} href="#import">Import Recipe</NavLink>
+                    <NavLink onClick={click} href="#import">Import Recipe</NavLink>
                     </NavItem>
                     <NavItem>
-                    <NavLink className={classnames({ active: props.activeTab === 'all'})}
-                            onClick={()=>{props.toggle('all')}} href="#all">All Recipes</NavLink>
+                    <NavLink onClick={click} href="#all">All Recipes</NavLink>
                     </NavItem>
                 </Nav>
             </Collapse>
